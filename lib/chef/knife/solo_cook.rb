@@ -297,13 +297,13 @@ class Chef
       def chef_version
         # Memoize the version to avoid multiple SSH calls
         @chef_version ||= lambda do
-          cmd = %q{sudo chef-solo --version 2>/dev/null | awk '$1 == "Chef:" {print $2}'}
+          cmd = %q{sudo /usr/local/bin/chef-solo --version 2>/dev/null | awk '$1 == "Chef:" {print $2}'}
           run_command(cmd).stdout.strip
         end.call
       end
 
       def cook
-        cmd = "sudo chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/dna.json"
+        cmd = "sudo /usr/local/bin/chef-solo -c #{provisioning_path}/solo.rb -j #{provisioning_path}/dna.json"
         cmd << " -l debug" if debug?
         cmd << " -N #{config[:chef_node_name]}" if config[:chef_node_name]
         cmd << " -W" if config[:why_run]
